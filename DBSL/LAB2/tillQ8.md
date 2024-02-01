@@ -9,3 +9,10 @@ create table employee(
 );
 ```
 
+### Q2
+```sql
+create table department(
+    deptno numeric(3) primary key,
+    deptname varchar(10) not null unique
+);
+```
