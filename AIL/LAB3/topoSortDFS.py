@@ -4,8 +4,9 @@ class Graph:
 
     def connect(self, from_vertex, to_vertex) -> None:
         self.adj_list.setdefault(from_vertex, []).append(to_vertex)
-        if to_vertex not in self.adj_list:
-            self.adj_list.setdefault(to_vertex, [])
+
+        #For nodes with in-vertex zero
+        self.adj_list.setdefault(to_vertex, [])
 
     def dfs(self, v, visited, stack):
         visited[v] = True
@@ -13,23 +14,29 @@ class Graph:
             if not visited[neighbour]:
                 self.dfs(neighbour, visited, stack)
         stack.append(v)
-
-    def TopologicalSort(self, start):
+        
+    def TopologicalSort(self):
         n = len(self.adj_list)
         visited = [False] * n
         stack = []
-        self.dfs(start, visited, stack)
+        for i in range(n):
+            if not visited[i]:
+                self.dfs(i, visited, stack)
         
         print("Depth First Traversal for the graph is:", end=" ")
-        for vertex in stack[::-1]:
-            print(vertex, end=" ")
-        print()
+        print(" ".join(map(str, stack[::-1])))
 
 if __name__ == "__main__":
     g = Graph()
-    #for i in [(0, 1), (0, 2), (0, 3), (1, 3), (2, 4), (3, 5), (3, 6), (4, 7), (4, 5), (5, 2)]:
-
-    for i in [(2, 3), (3, 1), (4, 0), (4, 1), (5, 0), (5, 2)]:
-        g.connect(i[0], i[1])
+    #nodes = [(0,1), (0,2), (1,2), (2,0), (2,3), (3,3)]
+    nodes = [(2, 3), (3, 1), (4, 0), (4, 1), (5, 0), (5, 2)]
+    for frm, to in nodes:
+        g.connect(frm, to)
     print("Adjacency List:", g.adj_list)
-    g.TopologicalSort(4)
+    g.TopologicalSort()
+
+'''
+OUTPUT
+Adjacency List: {2: [3], 3: [1], 1: [], 4: [0, 1], 0: [], 5: [0, 2]}
+Depth First Traversal for the graph is: 5 4 2 3 1 0
+'''
