@@ -1,8 +1,17 @@
+'''
+Toposort dfs approach:
+
+iterate through nodes sequentially 
+if the node is not visited yet then apply dfs on that node  
+when you reach end append to stack
+print the stack
+'''
+
 class Graph:
     def __init__(self):
         self.adj_list = dict()
 
-    def connect(self, from_vertex, to_vertex) -> None:
+    def connect(self, from_vertex, to_vertex):
         self.adj_list.setdefault(from_vertex, []).append(to_vertex)
 
         #For nodes with in-vertex zero
