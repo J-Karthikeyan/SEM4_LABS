@@ -1,29 +1,31 @@
 class Graph:
 
-    def __init__(self, adjlist: dict, heuristics:dict):
+    def __init__(self, adjlist: dict, heuristics: dict):
         self.heuristics = heuristics
         self.adjlist = adjlist
 
     def A_star(self, start, end):
-        fringe = [start, self.heuristics[start]]
+        fringe = [[start, self.heuristics[start], [start]]]
         visited = set()
+
         while fringe:
             node = fringe.pop(0)
 
             if node[0] == end:
-                cost = node[1] - self.heuristics(node[0]) 
-                return cost, node
+                cost = node[1] - self.heuristics[node[0]]
+                return cost, node[2]
 
             visited.add(node[0])
 
             for neighbor in self.adjlist[node[0]]:
                 if neighbor[0] not in visited:
-                    new_cost = node[1] - self.heuristics(node) +self.heuristics(neighbor) + neighbor[1]
-                    #new_path = node[2] + [node[0]]
-                    fringe.append([neighbor[0], new_cost])
+                    new_cost = node[1] - self.heuristics[node[0]] + self.heuristics[neighbor[0]] + neighbor[1]
+                    new_path = node[2] + [neighbor[0]]
+                    fringe.append([neighbor[0], new_cost, new_path])
                     fringe.sort(key=lambda a: a[1])
+
         return None, None
-    
+
 if __name__ == '__main__':
     heuristics = {
         'A': 10,
@@ -38,7 +40,7 @@ if __name__ == '__main__':
         'J': 0,
     }
 
-    Graph_nodes = {
+    graph = {
         'A': [('B', 6), ('F', 3)],
         'B': [('A', 6), ('C', 3), ('D', 2)],
         'C': [('B', 3), ('D', 1), ('E', 5)],
@@ -50,3 +52,12 @@ if __name__ == '__main__':
         'I': [('E', 5), ('G', 3), ('H', 2), ('J', 3)],
         'J': [('E', 5), ('I', 3)],
     }
+
+    g = Graph(graph, heuristics)
+    cost, path = g.A_star('A', 'J')
+    
+    if path:
+        print("Path: ", ' '.join(path))
+        print("Cost: ", cost)
+    else:
+        print("No path found.")
