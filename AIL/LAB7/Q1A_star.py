@@ -1,29 +1,27 @@
 class Graph:
-
     def __init__(self, adjlist: dict, heuristics: dict):
         self.heuristics = heuristics
         self.adjlist = adjlist
-
+    
     def A_star(self, start, end):
-        fringe = [[start, self.heuristics[start], [start]]]
+        queue = [{'name':start, 'cost':self.heuristics[start], 'path':[start]}]
         visited = set()
 
-        while fringe:
-            node = fringe.pop(0)
+        while queue:
+            node = queue.pop(0)
+            if node['name'] == end:
+                cost = node['cost'] - self.heuristics[node['name']]
+                return cost, node['path']
+            
+            visited.add(node['name'])
 
-            if node[0] == end:
-                cost = node[1] - self.heuristics[node[0]]
-                return cost, node[2]
-
-            visited.add(node[0])
-
-            for neighbor in self.adjlist[node[0]]:
-                if neighbor[0] not in visited:
-                    new_cost = node[1] - self.heuristics[node[0]] + self.heuristics[neighbor[0]] + neighbor[1]
-                    new_path = node[2] + [neighbor[0]]
-                    fringe.append([neighbor[0], new_cost, new_path])
-                    fringe.sort(key=lambda a: a[1])
-
+            for neighbour, weight in self.adjlist[node['name']]:
+                if neighbour not in visited:
+                    new_cost = (node['cost'] -self.heuristics[node['name']]) + (weight + self.heuristics[neighbour])
+                    new_path = node['path'] + [neighbour]
+                    queue.append({'name':neighbour, 'cost':new_cost, 'path':new_path})
+                    queue.sort(key = lambda a : a['cost'])
+            
         return None, None
 
 if __name__ == '__main__':
