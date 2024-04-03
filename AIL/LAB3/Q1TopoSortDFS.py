@@ -38,7 +38,7 @@ class Graph:
 if __name__ == "__main__":
     g = Graph()
     #nodes = [(0,1), (0,2), (1,2), (2,0), (2,3), (3,3)]
-    nodes = [(2, 3), (3, 1), (4, 0), (4, 1), (5, 0), (5, 2)]
+    nodes = [(0, 2), (2, 3), (3, 4), (2, 4), (1, 2)]
     for frm, to in nodes:
         g.connect(frm, to)
     print("Adjacency List:", g.adj_list)

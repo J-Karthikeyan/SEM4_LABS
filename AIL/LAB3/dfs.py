@@ -16,23 +16,32 @@ dfs(graph, start, end):
 
 '''
 
-def dfs(graph, start, visited=None):
-    if(visited is None):
-        visited = [False] * len(graph)
-    visited[start] = True
-    print(start)
-    for neighbour in sorted(graph[start]):
-        if not visited[neighbour]:
-            dfs(graph, neighbour, visited)
+def dfs(graph, start_node):
+    visited = set()
+    stack = [start_node]
+    traversal_order = []
+
+    while stack:
+        node = stack.pop()
+        if node not in visited:
+            visited.add(node)
+            traversal_order.append(node)
+            neighbors = sorted(graph[node], key=lambda x: (x, graph[x]))  
+            for neighbor in neighbors:
+                stack.append(neighbor)
+
+    return traversal_order
 
 if __name__ == "__main__":
 
     graph = {
-        0: [1,2,3],
-        1: [4],
-        2: [],
-        3: [2],
-        4: []
+        'a': ['b', 'c', 'd', 'e'],
+        'b': ['a', 'd', 'f'],
+        'c': ['a', 'g'],
+        'd': ['a', 'b', 'f'],
+        'e': ['a', 'g'],
+        'f': ['b', 'd'],
+        'g': ['c', 'e']
     }
 
-    dfs(graph, 0)
+    print(dfs(graph, 'a'))
