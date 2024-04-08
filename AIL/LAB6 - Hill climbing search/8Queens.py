@@ -17,7 +17,7 @@ class Board:
                 if self.positions[i] == j:
                     result += " Q "
                 else:
-                    result += " . "
+                    result += " x "
             result += "\n"
         result += '-' * self.n * 3 + "\n" + f"Total cost: {self.compute_attacks()}\n"
 
